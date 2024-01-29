@@ -68,22 +68,24 @@ int main(){
             switch (Option)
             {
             case 1:
-                system("cls");
+                // system("cls");
+                add_Patient_List_Func();
                 exit_Or_Back_Program_Func();
                 break;
             case 2:
-                system("cls");
+                // system("cls");
                 exit_Or_Back_Program_Func();
                 break;
             case 3:
-                system("cls");
+                // system("cls");
                 exit_Or_Back_Program_Func();
                 break;
             case 4:
-                system("cls");
+                // system("cls");
                 exit_Or_Back_Program_Func();
                 break;
             default:
+                exit_Program();
                 break;
             }
         }
@@ -97,8 +99,10 @@ int login_Func(){
     int is_Correct_lgName = 0;
     int is_Correct_lgPass = 0;
     int cnt = 0;
-    while(is_Correct_lgName == 0 || is_Correct_lgPass == 0) {
-        if(cnt >= 1) {
+    while(is_Correct_lgName == 0 || is_Correct_lgPass == 0) 
+    {
+        if(cnt >= 1) 
+        {
             printf("\nPlease Login Again\n");
         }
         // Login Name
@@ -110,16 +114,20 @@ int login_Func(){
         fgets(lg_PassWord, 100, stdin); 
         lg_PassWord[strlen(lg_PassWord) - 1] ='\0';
 
-        if(check_String(lg_Name) == 1){
+        if(check_String(lg_Name) == 1)
+        {
             is_Correct_lgName = 1;
         }
-        if(check_String(lg_PassWord) == 1) {
+        if(check_String(lg_PassWord) == 1) 
+        {
             is_Correct_lgPass = 1;
         }
-        if(is_Correct_lgName == 0 || is_Correct_lgPass == 0) {
+        if(is_Correct_lgName == 0 || is_Correct_lgPass == 0) 
+        {
             cnt++;
         }
-        if(cnt == 6){
+        if(cnt == 6)
+        {
             break;
         }
     }
@@ -130,20 +138,22 @@ int login_Func(){
 }
 
 // Hàm Menu----------------------------------------------------------------------------------
-void general_Menu_Func() {
+void general_Menu_Func() 
+{
     printf("\n\t\tPatients Management System\n");
     printf("\t\t\tMAIN MENU\n");
-    printf("\t\t======================\n");
+    printf("\t\t===========================\n");
     printf("\t\t[1] Add Patient List\n");
     printf("\t\t[2] Show Patient List\n");
     printf("\t\t[3] Update Patient Infor\n");
     printf("\t\t[4] Searching Patient\n");
     printf("\t\t[0] Exit the Program.\n");
-    printf("\t============================\n");
-    printf("\t\tEnter your choice");
+    printf("\t\t===========================\n");
+    printf("\t\tEnter your choice: ");
 }
 
-void show_Patient_Menu_Func() {
+void show_Patient_Menu_Func() 
+{
     printf("\n\t\tShow Patient Menu\n");
     printf("\t\t======================\n");
     printf("\t\t[1] Show All Patients\n");
@@ -153,7 +163,8 @@ void show_Patient_Menu_Func() {
     printf("\t\t[0] Exit or Go back the Program.\n");
 }
 
-void update_Patient_Menu_Func() {
+void update_Patient_Menu_Func() 
+{
     printf("\n\t\tUpdate Patient Menu\n");
     printf("\t\tChoose type of infor to update\n");
     printf("\t\t======================\n");
@@ -172,25 +183,36 @@ void update_Patient_Menu_Func() {
 
 // Phần hàm chức năng phụ--------------------------------------------------------------------
 
-int check_String(char str_Keyword[]){
+int check_String(char str_Keyword[])
+{
     int length = strlen(str_Keyword);
-    for(int i = 0; i < length; i++) {
-        if(isalpha(str_Keyword[i]) == 0 && isdigit(str_Keyword[i]) == 0){
+    for(int i = 0; i < length; i++) 
+    {
+        if(isalpha(str_Keyword[i]) == 0 && isdigit(str_Keyword[i]) == 0)
+        {
             return 0;
         }
     }
     return 1;
 }
 
-int is_Already_Exists(char checking_String[100], char patient_ID[50]) {
+int is_Already_Exists(char checking_String[100], char patient_ID[50]) 
+{
     int is_Exists = 0;
-    for(int i = 0; i < total_Patients; i++) {
-        if(strcmp(patient_ID, Patient[i].id) == 0) {
-            if(strcmp(checking_String, Patient[i].id)) { // ID check
+    for(int i = 0; i < total_Patients; i++) 
+    {
+        if(strcmp(patient_ID, Patient[i].id) == 0) 
+        {
+            if(strcmp(checking_String, Patient[i].id))  // ID check
+            { 
                 is_Exists++;
-            } else if (strcmp(checking_String, Patient[i].mobile_Phone)) { // Mobile check
+            } 
+            else if (strcmp(checking_String, Patient[i].mobile_Phone))  // Mobile check
+            { 
                 is_Exists++;
-            } else if (strcmp(checking_String, Patient[i].email)) { // email check
+            } 
+            else if (strcmp(checking_String, Patient[i].email))  // email check
+            { 
                 is_Exists++;
             }
             break;
@@ -199,21 +221,181 @@ int is_Already_Exists(char checking_String[100], char patient_ID[50]) {
     return is_Exists;
 }
 
-void add_Patient(PatientInfor Patient) {
-    while(){
+// PatientInfor Patient
+void add_Patient(int order) 
+{
+    getchar();
+    char Name[100];
+    char Id[50];
+    char Email[100];
+    char Gender[20];
+    struct Date DOB;
+    char Address[1000];
+    char MP[20];
+    char ICD10[100];
+    char MH[10000];
+    struct Date OSD;
+    struct Date DOD;
 
+    int is_Correct_Name = 1;
+    while(is_Correct_Name)
+    {
+        printf("Write patient's Name: ");
+        fgets(Name, 100, stdin);
+        Name[strlen(Name) - 1] = '\0';
+        if(strlen(Name) > 20) 
+        {
+            printf(" Error: Name can not be more than 20 characters.\n\n");
+            is_Correct_Name = 1;
+        } 
+        if(strlen(Name) <= 0) 
+        {
+            printf(" Error: Name can not be empty.\n\n");
+            is_Correct_Name = 1;
+        } 
+        else 
+        {
+            is_Correct_Name = 0;
+        }
     }
-    printf("Write patient's Name: ");
-    printf("Write patient's ID: ");
-    printf("Write patient's Email: ");
-    printf("Write patient's Gender: ");
-    printf("Write patient's DateOfBirth: ");
-    printf("Write patient's Address: "); 
-    printf("Write patient's MobilePhone: ");
-    printf("Write patient's ICD10 (first 4 character): ");
-    printf("Write patient's Medical History: ");
-    printf("Write patient's Onset Symptom Date: ");
-    printf("Write patient's Date Of Diagnosis: ");
+
+    int is_Correct_ID = 1;
+    while(is_Correct_ID)
+    {
+        printf("Write patient's ID: ");
+        fgets(Id, 50, stdin);
+        Id[strlen(Id) - 1] = '\0';
+        if(is_Already_Exists(Id, Id) > 0)
+        {
+            printf(" Error: This ID is already exists.\n\n");
+            is_Correct_ID = 1;
+        }
+        else if(strlen(Id) > 10)
+        {
+            printf(" Error: ID can not be more than 10 characters.\n\n");
+            is_Correct_ID = 1;
+        }
+        else if(strlen(Id) <= 0)
+        {
+            printf(" Error: ID can not be empty.\n\n");
+            is_Correct_ID = 1;
+        }
+        else
+        {
+            is_Correct_ID = 0;
+        }
+    }
+
+    int is_Correct_Email = 1;
+    while(is_Correct_Email) {
+        printf("Write patient's Email: ");
+        fgets(Email, 100, stdin);
+        Email[strlen(Email) - 1] = '\0';
+        if(is_Already_Exists(Email, Id) > 0) 
+        {
+            printf(" This Email is Already Exists.\n");
+            is_Correct_Email = 1;
+        } 
+        else if(strlen(Email) > 30) 
+        {
+            printf(" Error: Email can not be more than 30 characters.\n\n");
+            is_Correct_Email = 1;
+        }
+        else if(strlen(Email) <= 0)
+        {
+            printf(" Error: Email can not be empty.\n\n");
+            is_Correct_Email = 1;
+        }
+        else
+        {
+            is_Correct_Email = 0;
+        }
+    }
+
+    int is_Correct_Gender = 1;
+    while(is_Correct_Gender) 
+    {
+        printf("Write patient's Gender: ");
+        fgets(Gender, 20, stdin);
+        Gender[strlen(Gender) - 1] = '\0';
+        is_Correct_Gender = 0;
+    }
+
+    int is_Correct_DOB = 1;
+    while(is_Correct_DOB) 
+    {
+        printf("Write patient's DateOfBirth: ");
+        scanf("%d %d %d", &DOB.Day, &DOB.Month, &DOB.Year);
+        is_Correct_DOB = 0;
+    }
+
+    int is_Correct_Address = 1;
+    while(is_Correct_Address) {
+        printf("Write patient's Address: "); 
+        getchar();
+        fgets(Address, 1000, stdin);
+        Address[strlen(Address) - 1] = '\0';
+        is_Correct_Address = 0;
+    }
+
+    int is_Correct_Phone = 1;
+    while(is_Correct_Phone) {
+        printf("Write patient's MobilePhone: ");
+        fgets(MP, 20, stdin);
+        MP[strlen(MP) - 1] = '\0';
+        is_Correct_Phone = 0;
+    }
+
+    int is_Correct_ICD10 = 1;
+    while(is_Correct_ICD10) {
+        printf("Write patient's ICD10 (first 4 character): ");
+        fgets(ICD10, 100, stdin);
+        ICD10[strlen(ICD10) - 1] = '\0';
+        is_Correct_ICD10 = 0;
+    }
+
+    int is_Correct_MH = 1;
+    while(is_Correct_MH) {
+        printf("Write patient's Medical History: ");
+        fgets(MH, 10000, stdin);
+        MH[strlen(MH) - 1] = '\0';
+        is_Correct_MH = 0;
+    }
+
+    int is_Correct_OSD = 1;
+    while(is_Correct_OSD) {
+        printf("Write patient's Onset Symptom Date: ");
+        scanf("%d %d %d", &OSD.Day, &OSD.Month, &OSD.Year);
+        is_Correct_OSD = 0;
+    }
+
+    int is_Correct_DOD = 1;
+    while(is_Correct_DOD) {
+        printf("Write patient's Date Of Diagnosis: ");
+        scanf("%d %d %d", &DOD.Day, &DOD.Month, &DOD.Year);
+        is_Correct_DOD = 0;
+    }    
+
+    strcpy(Patient[order].name, Name);
+    strcpy(Patient[order].id, Id);
+    strcpy(Patient[order].email, Email);
+    strcpy(Patient[order].gender, Gender);
+    strcpy(Patient[order].address, Address);
+    strcpy(Patient[order].mobile_Phone, MP);
+    strcpy(Patient[order].ICD10, ICD10);
+    strcpy(Patient[order].medical_History, MH);
+
+    Patient[order].date_Of_Birth.Day = DOB.Day;
+    Patient[order].date_Of_Birth.Month = DOB.Month;
+    Patient[order].date_Of_Birth.Year = DOB.Year;
+
+    Patient[order].onset_Symptom_Date.Day = OSD.Day;
+    Patient[order].onset_Symptom_Date.Month = OSD.Month;
+    Patient[order].onset_Symptom_Date.Year = OSD.Year;
+
+    Patient[order].date_Of_Diagnosis.Day = DOD.Day;
+    Patient[order].date_Of_Diagnosis.Month = DOD.Month;
+    Patient[order].date_Of_Diagnosis.Year = DOD.Year;
 }
 
 void exit_Program() {
@@ -236,15 +418,15 @@ void exit_Program() {
 void add_Patient_List_Func() {
     int NOP;
     printf("Enter the number of patients: ");
-    scanf("%d", NOP);
+    scanf("%d", &NOP);
     total_Patients = NOP;
     for(int i = 0; i < total_Patients; i++){
-        add_Patient(Patient[i]);
+        printf("\n\n");
+        add_Patient(i);
     }
 }
 
 void exit_Or_Back_Program_Func() {
-    getchar();
     char Option;
     printf(" Go back(b)? or Exit(0)?: ");
     scanf("%c",&Option);
