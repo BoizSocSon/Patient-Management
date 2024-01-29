@@ -39,7 +39,11 @@ void show_Patient_Menu_Func();
 void update_Patient_Menu_Func();
 
 // Phần hàm chức năng phụ--------------------------------------------------------------------
+int check_Digit_String();
+int check_Alpha_String();
 int check_String();
+int check_Phone_Number();
+int check_Correct_Mail();
 int is_Already_Exists();
 void add_Patient();
 void searching_Patient();
@@ -183,17 +187,84 @@ void update_Patient_Menu_Func()
 
 // Phần hàm chức năng phụ--------------------------------------------------------------------
 
-int check_String(char str_Keyword[])
+int check_Digit_String(char check_digit_string[])
 {
-    int length = strlen(str_Keyword);
-    for(int i = 0; i < length; i++) 
+    int length = strlen(check_digit_string);
+    for(int i = 0; i < length; i++)
     {
-        if(isalpha(str_Keyword[i]) == 0 && isdigit(str_Keyword[i]) == 0)
+        if(isdigit(check_digit_string[i]) == 0)
         {
             return 0;
         }
     }
     return 1;
+}
+
+int check_Alpha_String(char check_alpha_string[]) 
+{
+    int correct = 1;
+    int length = strlen(check_alpha_string);
+    for(int i = 0; i < length; i++)
+    {
+        if(isalpha(check_alpha_string[i]) == 0)
+        {
+            correct = 0;
+        }
+        if(check_alpha_string[i] == ' ')
+        {
+            correct = 1;
+        }
+    }
+    return correct;
+}
+
+int check_String(char str_Keyword[])
+{
+    int correct = 1;
+    int length = strlen(str_Keyword);
+    for(int i = 0; i < length; i++) 
+    {
+        if(isalpha(str_Keyword[i]) == 0 && isdigit(str_Keyword[i]) == 0)
+        {
+            correct = 0;
+        }
+    }
+    return correct;
+}
+
+int check_Phone_Number(char phone_num[])
+{
+    if(check_Digit_String(phone_num) == 0)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+int check_Correct_Mail(char mail[])
+{
+    char checked_String[100];
+    int correct = 0;
+    int length = strlen(mail);
+    int pos = 0;
+    for(int i = 0; i < length; i++)
+    {
+        if((mail[i] == '@' ) || mail[i] == '.') 
+        {
+            correct++;
+            if(mail[i] == '@')
+            {
+                pos = i;
+            }
+        }
+    }
+    strncpy(checked_String, mail, pos);
+    checked_String[pos] = '\0';
+    if(check_String(checked_String) == 0)
+    {
+        correct = 0;
+    }
+    return correct;
 }
 
 int is_Already_Exists(char checking_String[100], char patient_ID[50]) 
@@ -237,6 +308,8 @@ void add_Patient(int order)
     struct Date OSD;
     struct Date DOD;
 
+
+    // Nhập vào tên bệnh nhân 
     int is_Correct_Name = 1;
     while(is_Correct_Name)
     {
@@ -248,17 +321,23 @@ void add_Patient(int order)
             printf(" Error: Name can not be more than 20 characters.\n\n");
             is_Correct_Name = 1;
         } 
-        if(strlen(Name) <= 0) 
+        else if(strlen(Name) <= 0) 
         {
             printf(" Error: Name can not be empty.\n\n");
             is_Correct_Name = 1;
         } 
+        else if(check_Alpha_String(Name) == 0) 
+        {
+            printf(" Error: Name is inValid.\n\n");
+            is_Correct_Name = 1;
+        }
         else 
         {
             is_Correct_Name = 0;
         }
     }
 
+    // Nhập vào ID bệnh nhân 
     int is_Correct_ID = 1;
     while(is_Correct_ID)
     {
@@ -280,12 +359,18 @@ void add_Patient(int order)
             printf(" Error: ID can not be empty.\n\n");
             is_Correct_ID = 1;
         }
+        else if(check_String(Id) == 0)
+        {
+            printf(" Error: ID is inValid.\n\n");
+            is_Correct_ID = 1;
+        }
         else
         {
             is_Correct_ID = 0;
         }
     }
 
+    // Nhập vào email bệnh nhân 
     int is_Correct_Email = 1;
     while(is_Correct_Email) {
         printf("Write patient's Email: ");
@@ -306,21 +391,52 @@ void add_Patient(int order)
             printf(" Error: Email can not be empty.\n\n");
             is_Correct_Email = 1;
         }
+        else if(check_Correct_Mail(Email) == 0) 
+        {
+            printf(" Error: Incorrect syntax for Email.\n\n");
+            is_Correct_Email = 1;
+        }
         else
         {
             is_Correct_Email = 0;
         }
     }
 
+    // Nhập vào giới tính bệnh nhân 
     int is_Correct_Gender = 1;
     while(is_Correct_Gender) 
     {
-        printf("Write patient's Gender: ");
-        fgets(Gender, 20, stdin);
-        Gender[strlen(Gender) - 1] = '\0';
-        is_Correct_Gender = 0;
+        int Option;
+        printf("Select patient's Gender: \n");
+        printf("[1] Male\n");
+        printf("[2] Female\n");
+        printf("[3] Other\n");
+        scanf("%d", &Option);
+        switch(Option)
+        {
+        case 1:
+            strcpy(Gender, "Male");
+            printf("Gender: male\n");
+            is_Correct_Gender = 0;
+            break;
+        case 2:
+            strcpy(Gender, "Female");
+            printf("Gender: Female\n");
+            is_Correct_Gender = 0;
+            break;
+        case 3:
+            strcpy(Gender, "Other");
+            printf("Gender: Other\n");
+            is_Correct_Gender = 0;
+            break;
+        default:    
+            printf(" Error: Gender is inValid.\n\n");
+            is_Correct_Gender = 1;
+            break;
+        }
     }
 
+    // Nhập vào ngày sinh bệnh nhân 
     int is_Correct_DOB = 1;
     while(is_Correct_DOB) 
     {
@@ -329,6 +445,7 @@ void add_Patient(int order)
         is_Correct_DOB = 0;
     }
 
+    // Nhập vào địa chỉ bệnh nhân 
     int is_Correct_Address = 1;
     while(is_Correct_Address) {
         printf("Write patient's Address: "); 
@@ -338,14 +455,39 @@ void add_Patient(int order)
         is_Correct_Address = 0;
     }
 
+    // Nhập vào số điện thoại bệnh nhân 
     int is_Correct_Phone = 1;
     while(is_Correct_Phone) {
         printf("Write patient's MobilePhone: ");
         fgets(MP, 20, stdin);
         MP[strlen(MP) - 1] = '\0';
-        is_Correct_Phone = 0;
+        if(is_Already_Exists(MP, Id) > 0)
+        {
+            printf(" This Phone Number is Already Exists\n");
+            is_Correct_Phone = 1;
+        }
+        else if(strlen(MP) > 20)
+        {
+            printf(" Error: Phone can not be more than 20 characters.\n\n");
+            is_Correct_Phone = 1;
+        }
+        else if(strlen(MP) <= 0)
+        {
+            printf(" Error: Phone can not be empty.\n\n");
+            is_Correct_Phone = 1;
+        }
+        else if(check_Phone_Number(MP) == 0) 
+        {
+            printf(" Error: Phone number contains alpha word.\n\n");
+            is_Correct_Phone = 1;
+        }
+        else
+        {
+            is_Correct_Phone = 0;
+        }
     }
 
+    // Nhập vào ICD10
     int is_Correct_ICD10 = 1;
     while(is_Correct_ICD10) {
         printf("Write patient's ICD10 (first 4 character): ");
@@ -354,6 +496,7 @@ void add_Patient(int order)
         is_Correct_ICD10 = 0;
     }
 
+    // Nhập vào tiểu sử bệnh lý của bệnh nhân 
     int is_Correct_MH = 1;
     while(is_Correct_MH) {
         printf("Write patient's Medical History: ");
@@ -362,6 +505,7 @@ void add_Patient(int order)
         is_Correct_MH = 0;
     }
 
+    // Nhập vào ngày phát hiện trệu chứng của bệnh 
     int is_Correct_OSD = 1;
     while(is_Correct_OSD) {
         printf("Write patient's Onset Symptom Date: ");
@@ -369,6 +513,7 @@ void add_Patient(int order)
         is_Correct_OSD = 0;
     }
 
+    // Nhập vào ngày chuẩn đoán bệnh 
     int is_Correct_DOD = 1;
     while(is_Correct_DOD) {
         printf("Write patient's Date Of Diagnosis: ");
