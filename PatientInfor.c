@@ -30,6 +30,7 @@ typedef struct Human PatientInfor;
 
 PatientInfor Patient[1000];
 int total_Patients = 0;
+int total_ICD10 = 23;
 
 int login_Func();
 
@@ -44,7 +45,9 @@ int check_Alpha_String();
 int check_String();
 int check_Phone_Number();
 int check_Correct_Mail();
+int count_Number_Letter();
 int is_Already_Exists();
+void data_Seed_ICD10();
 void add_Patient();
 void searching_Patient();
 void show_Patient();
@@ -147,10 +150,11 @@ void general_Menu_Func()
     printf("\n\t\tPatients Management System\n");
     printf("\t\t\tMAIN MENU\n");
     printf("\t\t===========================\n");
-    printf("\t\t[1] Add Patient List\n");
-    printf("\t\t[2] Show Patient List\n");
-    printf("\t\t[3] Update Patient Infor\n");
-    printf("\t\t[4] Searching Patient\n");
+    printf("\t\t[1] Add Patient List.\n");
+    printf("\t\t[2] Show Patient List.\n");
+    printf("\t\t[3] Update Patient Infor.\n");
+    printf("\t\t[4] Searching Patient.\n");
+    printf("\t\t[5] Save Patient's Information.")
     printf("\t\t[0] Exit the Program.\n");
     printf("\t\t===========================\n");
     printf("\t\tEnter your choice: ");
@@ -267,6 +271,15 @@ int check_Correct_Mail(char mail[])
     return correct;
 }
 
+int count_Number_Letter(int check) {
+    int cnt = 0;
+    while(check) {
+        check/=10;
+        cnt++;
+    }
+    return cnt;
+}
+
 int is_Already_Exists(char checking_String[100], char patient_ID[50]) 
 {
     int is_Exists = 0;
@@ -290,6 +303,61 @@ int is_Already_Exists(char checking_String[100], char patient_ID[50])
         }
     }
     return is_Exists;
+}
+
+char **data_Seed_ICD10()
+{
+    char **ICD10_Data = (char**)malloc(1000*sizeof(char*));
+    for(int i = 0; i < 1000; i++)
+    {
+        *(ptr+i) = (char*)malloc(1000*sizeof(char));
+    }
+    *(ptr+0) = "C40.00: K xuong vai";
+    *(ptr+1) = "C40.01: K dau tren xuong canh tay";
+    *(ptr+2) = "C40.02: K dau duoi xuong canh tay";
+    *(ptr+3) = "C40.03: K dau duoi xuong quay";
+    *(ptr+4) = "C40.04: K dau duoi xuong tru";
+    *(ptr+5) = "C40.05: K xuong ban, xuong ngon tay";
+    *(ptr+6) = "C40.06: K xuong suon";
+    *(ptr+7) = "C40.20: K dau tren xuong dui";
+    *(ptr+8) = "C40.21: K dau duoi xuong dui";
+    *(ptr+9) = "C40.22: K dau tren xuong chay";
+    *(ptr+10) = "C40.23: K dau duoi xuong chay";
+    *(ptr+11) = "C40.24: K xuong mac";
+    *(ptr+12) = "C40.3: K xuong chau ngan chi duoi";
+    *(ptr+13) = "C41.4: K xuong chau";
+    *(ptr+14) = "C49.1: K phan mem chi tren, vai";
+    *(ptr+15) = "C49.2: K phan mem chi duoi";
+    *(ptr+16) = "D16.0: U lanh xuong vai va xuong dai chi tren";
+    *(ptr+17) = "D16.1: U lanh xuong ngan chi tren";
+    *(ptr+18) = "D16.2: U lanh xuong dai chi duoi";
+    *(ptr+19) = "D16.7: U lanh xuong suon, xuong don";
+    *(ptr+20) = "D16.8: U lanh xuong chau";
+    *(ptr+21) = "D21.1: U phan mem chi tren";
+    *(ptr+22) = "D16.3: U lanh xuong ngan chi duoi";
+    return ICD10_Data
+}
+
+char **test() {
+    char **ptr = (char**)malloc(23*sizeof(char*));
+    for(int i = 0; i < 23; i++){
+        ptr[i] = (char*)malloc(1000*sizeof(char));
+    }
+    *(ptr+0) = "cd1";
+    *(ptr+1) = "cd2";
+    *(ptr+2) = "cd3";
+    *(ptr+3) = "cd4";
+    *(ptr+4) = "cd5";
+    *(ptr+5) = "cd6";
+    *(ptr+6) = "cd7";
+    *(ptr+7) = "cd8";
+    *(ptr+8) = "cd9";
+    *(ptr+9) = "cd10";
+    *(ptr+10) = "cd11";
+    *(ptr+11) = "cd12";
+    *(ptr+12) = "cd13";
+    *(ptr+13) = "cd14";
+    return ptr;
 }
 
 // PatientInfor Patient
@@ -442,7 +510,28 @@ void add_Patient(int order)
     {
         printf("Write patient's DateOfBirth: ");
         scanf("%d %d %d", &DOB.Day, &DOB.Month, &DOB.Year);
-        is_Correct_DOB = 0;
+        int cnt_DOB_Day = count_Number_Letter(DOB.Day);
+        int cnt_DOB_Month = count_Number_Letter(DOB.Month);
+        int cnt_DOB_Year = count_Number_Letter(DOB.Year);
+        if(cnt_DOB_Day > 2) 
+        {
+            printf(" Error: Day is inValid.\n");
+            is_Correct_DOB = 1;
+        }
+        if(cnt_DOB_Month > 2)
+        {
+            printf(" Error: Month is inValid.\n");
+            is_Correct_DOB = 1;
+        }
+        if(cnt_DOB_Year > 4) 
+        {
+            printf(" Error: Year is inValid.\n");
+            is_Correct_DOB = 1;
+        }
+        else
+        {
+            is_Correct_DOB = 0;   
+        }
     }
 
     // Nhập vào địa chỉ bệnh nhân 
@@ -493,7 +582,11 @@ void add_Patient(int order)
         printf("Write patient's ICD10 (first 4 character): ");
         fgets(ICD10, 100, stdin);
         ICD10[strlen(ICD10) - 1] = '\0';
-        is_Correct_ICD10 = 0;
+        int length = strlen(ICD10);
+        if(ICD10 > 6)
+        {   
+            printf(" Error: Invalid ICD10");
+        }
     }
 
     // Nhập vào tiểu sử bệnh lý của bệnh nhân 
@@ -510,7 +603,28 @@ void add_Patient(int order)
     while(is_Correct_OSD) {
         printf("Write patient's Onset Symptom Date: ");
         scanf("%d %d %d", &OSD.Day, &OSD.Month, &OSD.Year);
-        is_Correct_OSD = 0;
+        int cnt_OSD_Day = count_Number_Letter(OSD.Day);
+        int cnt_OSD_Month = count_Number_Letter(OSD.Month);
+        int cnt_OSD_Year = count_Number_Letter(OSD.Year);
+        if(cnt_OSD_Day > 2) 
+        {
+            printf(" Error: Day is inValid.\n");
+            is_Correct_OSD = 1;
+        }
+        if(cnt_OSD_Month > 2)
+        {
+            printf(" Error: Month is inValid.\n");
+            is_Correct_OSD = 1;
+        }
+        if(cnt_OSD_Year > 4) 
+        {
+            printf(" Error: Year is inValid.\n");
+            is_Correct_OSD = 1;
+        }
+        else
+        {
+            is_Correct_OSD = 0;   
+        }
     }
 
     // Nhập vào ngày chuẩn đoán bệnh 
@@ -518,7 +632,28 @@ void add_Patient(int order)
     while(is_Correct_DOD) {
         printf("Write patient's Date Of Diagnosis: ");
         scanf("%d %d %d", &DOD.Day, &DOD.Month, &DOD.Year);
-        is_Correct_DOD = 0;
+        int cnt_DOD_Day = count_Number_Letter(DOD.Day);
+        int cnt_DOD_Month = count_Number_Letter(DOD.Month);
+        int cnt_DOD_Year = count_Number_Letter(DOD.Year);
+        if(cnt_DOD_Day > 2) 
+        {
+            printf(" Error: Day is inValid.\n");
+            is_Correct_DOD = 1;
+        }
+        if(cnt_DOD_Month > 2)
+        {
+            printf(" Error: Month is inValid.\n");
+            is_Correct_DOD = 1;
+        }
+        if(cnt_DOD_Year > 4) 
+        {
+            printf(" Error: Year is inValid.\n");
+            is_Correct_DOD = 1;
+        }
+        else
+        {
+            is_Correct_DOD = 0;   
+        }
     }    
 
     strcpy(Patient[order].name, Name);
