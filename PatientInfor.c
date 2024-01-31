@@ -45,9 +45,11 @@ int check_Alpha_String();
 int check_String();
 int check_Phone_Number();
 int check_Correct_Mail();
+int check_Leap_Year();
+int check_Correct_Date();
 int count_Number_Letter();
 int is_Already_Exists();
-void data_Seed_ICD10();
+char **data_Seed_ICD10();
 void add_Patient();
 void searching_Patient();
 void show_Patient();
@@ -154,7 +156,7 @@ void general_Menu_Func()
     printf("\t\t[2] Show Patient List.\n");
     printf("\t\t[3] Update Patient Infor.\n");
     printf("\t\t[4] Searching Patient.\n");
-    printf("\t\t[5] Save Patient's Information.")
+    printf("\t\t[5] Save Patient's Information.\n");
     printf("\t\t[0] Exit the Program.\n");
     printf("\t\t===========================\n");
     printf("\t\tEnter your choice: ");
@@ -245,6 +247,83 @@ int check_Phone_Number(char phone_num[])
     return 1;
 }
 
+int check_Leap_Year(int year)
+{
+    int leap_Year = 1;
+    if (year % 4 == 0) 
+    {
+        if (year % 100 == 0) {
+            if (year % 400 == 0)
+                leap_Year = 1;
+            else
+                leap_Year = 0;
+        } else
+            leap_Year = 1;
+    } else
+        leap_Year = 0;
+    return leap_Year;
+}
+
+int check_Correct_Date(int day, int month, int year) 
+{
+    int correct = 1;
+    int leap_Year = check_Leap_Year(year);
+    if(month >= 13 || month <=0)
+    {
+        correct = 0;
+        return correct;
+    }
+    if(leap_Year == 1)
+    {
+        if(month == 1 || month == 3|| month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+        {
+            if(day > 31) 
+            {
+                correct = 0;
+            }
+        } 
+        else if (month == 2) 
+        {
+            if(day > 29)
+            {
+                correct = 0;
+            }
+        } 
+        else 
+        {
+            if(day > 30)
+            {
+                correct = 0;
+            }
+        }
+    }
+    else if(leap_Year == 0) 
+    {
+        if(month == 1 || month == 3|| month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+        {
+            if(day > 31) 
+            {
+                correct = 0;
+            }
+        } 
+        else if (month == 2) 
+        {
+            if(day > 28)
+            {
+                correct = 0;
+            }
+        } 
+        else 
+        {
+            if(day > 30)
+            {
+                correct = 0;
+            }
+        }
+    }
+    return correct;
+}
+
 int check_Correct_Mail(char mail[])
 {
     char checked_String[100];
@@ -305,59 +384,38 @@ int is_Already_Exists(char checking_String[100], char patient_ID[50])
     return is_Exists;
 }
 
+// Cần nâng cấp để dữ liệu này có thể đọc từ file
 char **data_Seed_ICD10()
 {
     char **ICD10_Data = (char**)malloc(1000*sizeof(char*));
     for(int i = 0; i < 1000; i++)
     {
-        *(ptr+i) = (char*)malloc(1000*sizeof(char));
+        *(ICD10_Data+i) = (char*)malloc(1000*sizeof(char));
     }
-    *(ptr+0) = "C40.00: K xuong vai";
-    *(ptr+1) = "C40.01: K dau tren xuong canh tay";
-    *(ptr+2) = "C40.02: K dau duoi xuong canh tay";
-    *(ptr+3) = "C40.03: K dau duoi xuong quay";
-    *(ptr+4) = "C40.04: K dau duoi xuong tru";
-    *(ptr+5) = "C40.05: K xuong ban, xuong ngon tay";
-    *(ptr+6) = "C40.06: K xuong suon";
-    *(ptr+7) = "C40.20: K dau tren xuong dui";
-    *(ptr+8) = "C40.21: K dau duoi xuong dui";
-    *(ptr+9) = "C40.22: K dau tren xuong chay";
-    *(ptr+10) = "C40.23: K dau duoi xuong chay";
-    *(ptr+11) = "C40.24: K xuong mac";
-    *(ptr+12) = "C40.3: K xuong chau ngan chi duoi";
-    *(ptr+13) = "C41.4: K xuong chau";
-    *(ptr+14) = "C49.1: K phan mem chi tren, vai";
-    *(ptr+15) = "C49.2: K phan mem chi duoi";
-    *(ptr+16) = "D16.0: U lanh xuong vai va xuong dai chi tren";
-    *(ptr+17) = "D16.1: U lanh xuong ngan chi tren";
-    *(ptr+18) = "D16.2: U lanh xuong dai chi duoi";
-    *(ptr+19) = "D16.7: U lanh xuong suon, xuong don";
-    *(ptr+20) = "D16.8: U lanh xuong chau";
-    *(ptr+21) = "D21.1: U phan mem chi tren";
-    *(ptr+22) = "D16.3: U lanh xuong ngan chi duoi";
-    return ICD10_Data
-}
-
-char **test() {
-    char **ptr = (char**)malloc(23*sizeof(char*));
-    for(int i = 0; i < 23; i++){
-        ptr[i] = (char*)malloc(1000*sizeof(char));
-    }
-    *(ptr+0) = "cd1";
-    *(ptr+1) = "cd2";
-    *(ptr+2) = "cd3";
-    *(ptr+3) = "cd4";
-    *(ptr+4) = "cd5";
-    *(ptr+5) = "cd6";
-    *(ptr+6) = "cd7";
-    *(ptr+7) = "cd8";
-    *(ptr+8) = "cd9";
-    *(ptr+9) = "cd10";
-    *(ptr+10) = "cd11";
-    *(ptr+11) = "cd12";
-    *(ptr+12) = "cd13";
-    *(ptr+13) = "cd14";
-    return ptr;
+    *(ICD10_Data+0) = "C40.00: K xuong vai";
+    *(ICD10_Data+1) = "C40.01: K dau tren xuong canh tay";
+    *(ICD10_Data+2) = "C40.02: K dau duoi xuong canh tay";
+    *(ICD10_Data+3) = "C40.03: K dau duoi xuong quay";
+    *(ICD10_Data+4) = "C40.04: K dau duoi xuong tru";
+    *(ICD10_Data+5) = "C40.05: K xuong ban, xuong ngon tay";
+    *(ICD10_Data+6) = "C40.06: K xuong suon";
+    *(ICD10_Data+7) = "C40.20: K dau tren xuong dui";
+    *(ICD10_Data+8) = "C40.21: K dau duoi xuong dui";
+    *(ICD10_Data+9) = "C40.22: K dau tren xuong chay";
+    *(ICD10_Data+10) = "C40.23: K dau duoi xuong chay";
+    *(ICD10_Data+11) = "C40.24: K xuong mac";
+    *(ICD10_Data+12) = "C40.3: K xuong chau ngan chi duoi";
+    *(ICD10_Data+13) = "C41.4: K xuong chau";
+    *(ICD10_Data+14) = "C49.1: K phan mem chi tren, vai";
+    *(ICD10_Data+15) = "C49.2: K phan mem chi duoi";
+    *(ICD10_Data+16) = "D16.0: U lanh xuong vai va xuong dai chi tren";
+    *(ICD10_Data+17) = "D16.1: U lanh xuong ngan chi tren";
+    *(ICD10_Data+18) = "D16.2: U lanh xuong dai chi duoi";
+    *(ICD10_Data+19) = "D16.7: U lanh xuong suon, xuong don";
+    *(ICD10_Data+20) = "D16.8: U lanh xuong chau";
+    *(ICD10_Data+21) = "D21.1: U phan mem chi tren";
+    *(ICD10_Data+22) = "D16.3: U lanh xuong ngan chi duoi";
+    return ICD10_Data;
 }
 
 // PatientInfor Patient
@@ -484,7 +542,7 @@ void add_Patient(int order)
         {
         case 1:
             strcpy(Gender, "Male");
-            printf("Gender: male\n");
+            printf("Gender: Male\n");
             is_Correct_Gender = 0;
             break;
         case 2:
@@ -526,6 +584,11 @@ void add_Patient(int order)
         if(cnt_DOB_Year > 4) 
         {
             printf(" Error: Year is inValid.\n");
+            is_Correct_DOB = 1;
+        }
+        if(check_Correct_Date(DOB.Day, DOB.Month, DOB.Year) == 0)
+        {
+            printf(" Error: Date of Birth is inValid.\n");
             is_Correct_DOB = 1;
         }
         else
@@ -583,10 +646,11 @@ void add_Patient(int order)
         fgets(ICD10, 100, stdin);
         ICD10[strlen(ICD10) - 1] = '\0';
         int length = strlen(ICD10);
-        if(ICD10 > 6)
+        if(strlen(ICD10) > 6)
         {   
-            printf(" Error: Invalid ICD10");
+            printf(" Error: Invalid ICD10\n");
         }
+        is_Correct_ICD10 = 0;
     }
 
     // Nhập vào tiểu sử bệnh lý của bệnh nhân 
@@ -621,6 +685,11 @@ void add_Patient(int order)
             printf(" Error: Year is inValid.\n");
             is_Correct_OSD = 1;
         }
+        if(check_Correct_Date(OSD.Day, OSD.Month, OSD.Year) == 0)
+        {
+            printf(" Error: Onset Symptom Date is inValid.\n");
+            is_Correct_OSD = 1;
+        }
         else
         {
             is_Correct_OSD = 0;   
@@ -648,6 +717,11 @@ void add_Patient(int order)
         if(cnt_DOD_Year > 4) 
         {
             printf(" Error: Year is inValid.\n");
+            is_Correct_DOD = 1;
+        }
+        if(check_Correct_Date(DOD.Day, DOD.Month, DOD.Year) == 0)
+        {
+            printf(" Error: Date of Diagnosis is inValid.\n");
             is_Correct_DOD = 1;
         }
         else
@@ -678,6 +752,26 @@ void add_Patient(int order)
     Patient[order].date_Of_Diagnosis.Year = DOD.Year;
 }
 
+void searching_Patient()
+{
+
+}
+
+void show_Patient(PatientInfor showed_Patient)
+{   
+    printf("Patient's Name: ", showed_Patient.name);
+    printf("Patient's id: ", showed_Patient.id);
+    printf("Patient's email: ", showed_Patient.email);
+    printf("Patient's gender: ", showed_Patient.gender);
+    printf("Patient's Date of Birth: ", showed_Patient.date_Of_Birth);
+    printf("Patient's Address: ", showed_Patient.address);
+    printf("Patient's Mobile phone: ", showed_Patient.mobile_Phone);
+    printf("Patient's ICD10: ", showed_Patient.ICD10);
+    printf("Patient's Medical history: ", showed_Patient.medical_History);
+    printf("Patient's Onset symptom date: ", showed_Patient.onset_Symptom_Date);
+    printf("Patient's Date of diagnosis: ", showed_Patient.date_Of_Diagnosis);
+}
+
 void exit_Program() {
     system("cls");
     int i;
@@ -695,15 +789,43 @@ void exit_Program() {
 }
 
 // Phần hàm chức năng chính------------------------------------------------------------------
-void add_Patient_List_Func() {
+void add_Patient_List_Func() 
+{
     int NOP;
     printf("Enter the number of patients: ");
     scanf("%d", &NOP);
     total_Patients = NOP;
-    for(int i = 0; i < total_Patients; i++){
+    for(int i = 0; i < total_Patients; i++)
+    {
         printf("\n\n");
         add_Patient(i);
     }
+}
+
+void show_Patient()
+{
+    show_Patient_Menu_Func();
+    int Option;
+    scanf("%d", &Option);
+    switch (Option)
+    {
+    case 1: // Show all 
+        
+        break;
+    case 2: // Show by Name
+        
+        break;
+    case 3: // Show by ID
+        
+        break;
+    case 4: // Show have same icd10
+        
+        break;
+    default:
+
+        break;
+    }
+
 }
 
 void exit_Or_Back_Program_Func() {
@@ -716,4 +838,4 @@ void exit_Or_Back_Program_Func() {
     else {
         system("cls");
     }
-}
+} 
