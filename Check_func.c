@@ -1,33 +1,43 @@
-#include<stdio.h>
-#include<stdlib.h>
+// #include<stdio.h>
+// #include<stdlib.h>
+// #include<string.h>
 
-char **test() {
-    char **ptr = (char**)malloc(23*sizeof(char*));
-    for(int i = 0; i < 23; i++){
-        *(ptr+i) = (char*)malloc(1000*sizeof(char));
-    }
-    *(ptr+0) = "cd1";
-    *(ptr+1) = "cd2";
-    *(ptr+2) = "cd3";
-    *(ptr+3) = "cd4";
-    *(ptr+4) = "cd5";
-    *(ptr+5) = "cd6";
-    *(ptr+6) = "cd7";
-    *(ptr+7) = "cd8";
-    *(ptr+8) = "cd9";
-    *(ptr+9) = "cd10";
-    *(ptr+10) = "cd11";
-    *(ptr+11) = "cd12";
-    *(ptr+12) = "cd13";
-    *(ptr+13) = "cd14";
-    return ptr;
-}
+// int main(){
+//     char check[1000];
+//     printf("Please enter a string: ");
+//     fgets(check, sizeof(check), stdin); // read string from user
+//     check[strlen(check) - 1] = '\0'; // remove newline character
+
+//     char *test = strstr(check, "ICD10"); // find "ICD10" in the string
+
+//     if (test != NULL) {
+//         printf("%s\n", test); // print the remaining string after "ICD10"
+//     } else {
+//         printf("ICD10 not found in the string.\n");
+//     }
+
+//     return 0;
+// }
+
+#include <stdio.h>
+#include <string.h>
 
 int main() {
-    char **ptr = test();
-    for(int i = 0; i < 14; i++){
-        printf("%s\n", *(ptr+i));
+    char check[1000];
+    printf("Please enter a string: ");
+    fgets(check, sizeof(check), stdin); // read string from user
+    check[strlen(check) - 1] = '\0'; // remove newline character
+    char* p;
+
+    p = strstr(check, "ICD10");
+
+    if (p) {
+        printf("String found\n");
+        printf("'%s'",  check);
+    } else {
+        printf("String not found\n");
     }
-    free(ptr);
+
     return 0;
 }
+
